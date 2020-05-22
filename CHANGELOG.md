@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## HEAD
+
+**cosmwasm-std**
+
+- Trait `Querier` is not `Clone` and `Send` anymore.
+
+**cosmwasm-storage**
+
+- Remove `transactional_deps`. Use `transactional` that just provides a transactional storage instead.
+
 ## 0.8.0 (not yet released)
 
 **all**

@@ -139,7 +139,7 @@ pub fn add_iterator<'a, S: Storage, Q: Querier>(
     new_id
 }
 
-pub(crate) fn with_storage_from_context<'a, 'b, S, Q, F, T>(
+pub(crate) fn with_storage_from_context<'a, 'b, S, Q: 'b, F, T>(
     ctx: &'a mut Ctx,
     func: F,
 ) -> VmResult<T>
@@ -155,7 +155,7 @@ where
     }
 }
 
-pub(crate) fn with_querier_from_context<'a, 'b, S, Q, F, T>(
+pub(crate) fn with_querier_from_context<'a, 'b, S, Q: 'b, F, T>(
     ctx: &'a mut Ctx,
     func: F,
 ) -> VmResult<T>
@@ -172,7 +172,7 @@ where
 }
 
 #[cfg(feature = "iterator")]
-pub(crate) fn with_iterator_from_context<'a, 'b, S, Q, F, T>(
+pub(crate) fn with_iterator_from_context<'a, 'b, S, Q: 'b, F, T>(
     ctx: &'a mut Ctx,
     iterator_id: u32,
     func: F,
