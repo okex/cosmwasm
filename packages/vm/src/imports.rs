@@ -14,7 +14,7 @@ use crate::context::{
     with_func_from_context, with_querier_from_context, with_storage_from_context,
 };
 use crate::conversion::{to_i32, to_u32};
-use crate::errors::{VmError, VmResult};
+use crate::errors::{make_generic_err, VmError, VmResult};
 #[cfg(feature = "iterator")]
 use crate::memory::maybe_read_region;
 use crate::memory::{read_region, write_region};
@@ -161,6 +161,14 @@ pub fn do_read<S: Storage, Q: Querier>(ctx: &mut Ctx, key_ptr: u32) -> VmResult<
         let ptr = allocate.call(out_size)?;
         Ok(ptr)
     })?;
+
+    // TODO: is this a legal pointer in Wasm or can we blame the contract?
+    if out_ptr == 0 {
+        return Err(make_generic_err(
+            "Got a null Wasm pointer from allocate(). We cannot use it here as it represents _key does not exist_ in this context.",
+        ));
+    }
+
     write_region(ctx, out_ptr, &out_data)?;
     Ok(out_ptr)
 }
